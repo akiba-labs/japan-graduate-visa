@@ -1,0 +1,31 @@
+{
+  "name": "japan-graduate-visa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Free checker for international students graduating in Japan: when to change from student visa (留学) to a work visa (ISA's 1 Dec–31 Jan request for April starts), the job-hunting 特定活動, 内定者 特定活動, part-time end at graduation and the 14-day school-leaving notice. Keyless JSON API + MCP.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "node --import tsx --test lib/graduate.test.ts lib/api.test.ts lib/share.test.ts lib/mobile.test.ts"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "next": "^16.3.5",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^16.3.5",
+    "tailwindcss": "^4",
+    "tsx": "^4.23.15",
+    "typescript": "^5"
+  }
+}

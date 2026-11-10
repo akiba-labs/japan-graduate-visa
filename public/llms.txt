@@ -1,0 +1,59 @@
+# Japan Graduate Visa Check
+
+> Free, unofficial date checklist for international students graduating in Japan. With a job offer: change from Student (留学) to a work status (usually 技術・人文知識・国際業務); for April starts the Immigration Services Agency (ISA) asks students to file between 1 December and 31 January (a request, not a legal deadline); other start dates: file once you have the offer, ideally 2+ months ahead (standard processing 1–2 months). You can file with a certificate of expected graduation and collect the new card after graduating; you cannot start work before the grant. Still job hunting: university / 専門士 graduates with a school recommendation can switch to 特定活動 (継続就職活動), 6 months + 1 renewal (~1 year). Long gap before the start date: 内定者 特定活動 (hire within 1 year of the offer and 1 year 6 months of graduation). Always: part-time work on the 留学 permission ends at graduation; report leaving the school to ISA within 14 days. Rules as of 2026-11-10. Educational, not advice; not affiliated with ISA or any school.
+
+Site: https://japan-graduate-visa.vercel.app
+
+## Key facts (official sources below)
+- April starts (ISA 10_00240): file 12/1–1/31. If 留学 expires on or before 1/31 and you are still studying after that, extend 留学 first. Document omission since 2025-12-01 for Japanese-university graduates, top-300 foreign-university graduates, or employers already employing a former student (not dispatch).
+- Change of status (ISA 16-2): from when the reason arises up to the current expiry; standard processing 1–2 months; fee by period granted from 2026-10-01 (counter ¥10,000–¥75,000, 1 year ¥33,000; online ¥10,000–¥65,000 + ¥330/¥550). A timely application keeps you lawfully in Japan until the decision, up to 2 months after expiry.
+- 継続就職活動 特定活動 (nyukan_nyukan84): 6 months, renewable once; school recommendation; 2nd year only via eligible local-government programmes; foreign-bachelor graduates of certain certified Japanese language schools also eligible. 資格外活動 up to 28 h/week possible.
+- 内定者 特定活動 (nyuukokukanri07_00013): Japanese university / vocational graduates; hired within 1 year of offer AND 1 year 6 months of graduation; employer pledge; 28 h/week possible.
+- Part-time ends at graduation (school guidance, e.g. Meiji University). Staying long on 留学 after graduating is not allowed.
+- 所属機関に関する届出: within 14 days of leaving the school.
+- Not covered: whether your job fits 技人国 (ISA judges duties vs major), 46号 details (see Japan JLPT Level Check), J-Find, startup visas.
+
+## API (free, no key, CORS open)
+
+### GET
+GET https://japan-graduate-visa.vercel.app/api/check?graduationDate=2027-03-20&jobStartDate=2027-04-01&studentExpiry=2027-07-15&plan=job_offer&today=2026-11-10
+→ verdict "too_early", windowOpens "2026-12-01", recommendedBy "2027-01-31", lastDay "2027-03-31", partTimeEnds "2027-03-20", notifySchoolLeftBy "2027-04-03", fee.totalJPY 33000, deadlines, actions, warnings, sources, disclaimer
+
+### POST
+POST https://japan-graduate-visa.vercel.app/api/check
+{"graduationDate":"2027-03-20","studentExpiry":"2027-07-15","plan":"job_hunting","today":"2027-03-25"}
+→ verdict "open", jobHuntingUntil "2028-03-20", fee.totalJPY 18000
+
+Parameters: graduationDate (required), plan (job_offer | job_hunting | leaving | further_study), jobStartDate (required for job_offer), studentExpiry, school (university | vocational | language_school | other), foreignBachelor, offerDate, appliedDate, expectedGrantMonths, method (counter | online), today. Aliases accepted (内定, 就職活動, 帰国, 専門学校, 卒業日, 入社日…).
+
+Verdicts: too_early | open | urgent | applied | not_eligible | expired | info.
+
+Bad input → 400 {error, docs, example, disclaimer}.
+
+### Other endpoints
+- GET https://japan-graduate-visa.vercel.app/api/rules
+- https://japan-graduate-visa.vercel.app/openapi.json
+- https://japan-graduate-visa.vercel.app/.well-known/ai-plugin.json
+- MCP: tool japan_graduate_visa_check on https://free-agent-tools.vercel.app/mcp
+
+## Official sources
+- https://www.moj.go.jp/isa/10_00240.html
+- https://www.moj.go.jp/isa/content/001353746.pdf
+- https://www.moj.go.jp/isa/applications/procedures/16-2.html
+- https://www.moj.go.jp/isa/applications/resources/nyukan_nyukan84.html
+- https://www.moj.go.jp/isa/applications/resources/nyuukokukanri07_00013.html
+- https://www.moj.go.jp/isa/applications/status/designatedactivities15.html
+- https://www.moj.go.jp/isa/applications/status/designatedactivities11.html
+- https://www.moj.go.jp/isa/applications/procedures/nyuukokukanri07_00003.html
+- https://www.meiji.ac.jp/cip/student_support/entry_clearance/activities.html
+
+## Other free tools
+- https://japan-visa-renewal.vercel.app — Japan Visa Renewal Window Check
+- https://japan-jlpt-check.vercel.app — Japan JLPT Level Check
+- https://japan-parttime-check.vercel.app — Japan Part-time Work Check
+- https://japan-visa-fee.vercel.app — Japan Visa Fee Calculator
+- https://japan-hsp-points.vercel.app — Japan HSP Points Calculator
+- https://japan-job-loss.vercel.app — Japan Job Loss Check
+- https://japan-leaving-tax.vercel.app — Japan Leaving Tax Check
+- https://japan-reentry-check.vercel.app — Japan Re-entry Deadline Check
+- https://free-agent-tools.vercel.app — Free Agent Tools MCP
