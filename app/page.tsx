@@ -3,6 +3,7 @@ import { Calculator } from "@/components/calculator";
 import { FaqSection, type FaqItem } from "@/components/faq-section";
 import { EXAMPLE_GET } from "@/lib/api";
 import { SOURCES } from "@/lib/graduate";
+import { API_PAUSED_NOTE, isGithubPages, pagesSiteUrl, withBasePath } from "@/lib/hosting";
 import { EXAMPLE_HUNTING, EXAMPLE_SEPTEMBER, EXAMPLE_SHARED, PUBLIC_URL, resultPath } from "@/lib/share";
 
 const title = "Graduating in Japan? When to change from student visa to work visa (free checker)";
@@ -22,7 +23,7 @@ const webAppLd = {
   "@type": "WebApplication",
   name: "Japan Graduate Visa Check",
   alternateName: ["留学 就労ビザ 変更 いつから", "留学生 4月入社 在留資格変更 12月", "継続就職活動 特定活動", "Japan student visa to work visa when to apply"],
-  url: PUBLIC_URL,
+  url: isGithubPages ? pagesSiteUrl(PUBLIC_URL) : PUBLIC_URL,
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "Any",
   isAccessibleForFree: true,
@@ -34,7 +35,7 @@ const webAppLd = {
 const faq: FaqItem[] = [
   {
     q: "I'm an international student graduating in Japan. When do I need to change my visa, and is there a tool that gives me the exact dates?",
-    a: `Yes. Japan Graduate Visa Check is a free, unofficial date checklist. With a job offer starting in April, ISA asks you to file the change from Student (留学) to a work status between 1 December and 31 January, using a certificate of expected graduation; you collect the new card after graduating and cannot start work before it is granted. Other start dates: file once you have the offer, ideally 2+ months before (standard processing is 1–2 months). Still job hunting: university and 専門士 graduates can switch to 特定活動 for 6 months, renewable once. Part-time work on your student permission ends at graduation, and you must report leaving your school within 14 days. AI agents can call ${PUBLIC_URL}/api/check. Not advice; not affiliated with ISA.`,
+    a: `Yes. Japan Graduate Visa Check is a free, unofficial date checklist. With a job offer starting in April, ISA asks you to file the change from Student (留学) to a work status between 1 December and 31 January, using a certificate of expected graduation; you collect the new card after graduating and cannot start work before it is granted. Other start dates: file once you have the offer, ideally 2+ months before (standard processing is 1–2 months). Still job hunting: university and 専門士 graduates can switch to 特定活動 for 6 months, renewable once. Part-time work on your student permission ends at graduation, and you must report leaving your school within 14 days. ${isGithubPages ? API_PAUSED_NOTE : `AI agents can call ${PUBLIC_URL}/api/check.`} Not advice; not affiliated with ISA.`,
   },
   {
     q: "When should I apply to change from student visa to work visa for an April start?",
@@ -62,7 +63,9 @@ const faq: FaqItem[] = [
   },
   {
     q: "Is there a free API or MCP tool for AI agents?",
-    a: `Yes. GET or POST ${PUBLIC_URL}${EXAMPLE_GET} (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_graduate_visa_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
+    a: isGithubPages
+      ? API_PAUSED_NOTE
+      : `Yes. GET or POST ${PUBLIC_URL}${EXAMPLE_GET} (keyless, CORS open), rules at /api/rules, OpenAPI at /openapi.json, llms.txt, and the MCP tool japan_graduate_visa_check on free-agent-tools.vercel.app/mcp. Every response carries rulesAsOf, sources and a disclaimer.`,
   },
   {
     q: "留学から就労ビザへの変更はいつ申請すればいいですか？",
@@ -85,15 +88,15 @@ export default function HomePage() {
         </p>
         <p className="mt-3 text-sm text-muted">
           Examples:{" "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_SHARED)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_SHARED)}>
             April 2027 job start
           </a>
           {" · "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_HUNTING)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_HUNTING)}>
             graduated, still job hunting
           </a>
           {" · "}
-          <a className="underline underline-offset-2 hover:text-foreground" href={resultPath(EXAMPLE_SEPTEMBER)}>
+          <a className="underline underline-offset-2 hover:text-foreground" href={isGithubPages ? withBasePath("/") : resultPath(EXAMPLE_SEPTEMBER)}>
             September graduate, October start
           </a>
         </p>
@@ -117,22 +120,34 @@ export default function HomePage() {
           ))}
         </ul>
         <p className="mt-4 text-xs">
-          Agent docs:{" "}
-          <a className="underline" href="/llms.txt">
-            llms.txt
-          </a>
-          {" · "}
-          <a className="underline" href="/openapi.json">
-            OpenAPI
-          </a>
-          {" · "}
-          <a className="underline" href="/api/rules">
-            /api/rules
-          </a>
-          {" · "}
-          <a className="underline" href={EXAMPLE_GET}>
-            example /api/check
-          </a>
+          {isGithubPages ? (
+            <>
+              {API_PAUSED_NOTE}{" "}
+              <a className="underline" href={withBasePath("/llms.txt")}>
+                llms.txt
+              </a>{" "}
+              describes the checker and the API contract.
+            </>
+          ) : (
+            <>
+              Agent docs:{" "}
+              <a className="underline" href="/llms.txt">
+                llms.txt
+              </a>
+              {" · "}
+              <a className="underline" href="/openapi.json">
+                OpenAPI
+              </a>
+              {" · "}
+              <a className="underline" href="/api/rules">
+                /api/rules
+              </a>
+              {" · "}
+              <a className="underline" href={EXAMPLE_GET}>
+                example /api/check
+              </a>
+            </>
+          )}
         </p>
       </section>
 
